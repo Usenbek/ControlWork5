@@ -8,7 +8,11 @@ from rest_framework.authentication import SessionAuthentication
 
 # Create your views here.
 
-#Лист постов
+
+#для каждого запроса кроме чтения данных нужно быть авторизованным
+
+
+#Лист постов и создание
 class PostListAPIView(ListCreateAPIView):
       queryset = Post.objects.all()
       serializer_class = PostListSerializer
@@ -18,7 +22,7 @@ class PostListAPIView(ListCreateAPIView):
       def perform_create(self, serializer):
             serializer.save(author=self.request.user)
 
-#Подробная информация про определенный пост (по id)
+#Подробная информация про определенный пост и его редактирование для автора поста(по id)
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
       queryset = Post.objects.all()
       lookup_field = 'id'
@@ -30,7 +34,7 @@ class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
         post = Post.objects.get(id=post_id)
         serializer.save(author=self.request.user, post=post)
 
-#Просмотр комментариев под постом и добавления комментария
+#Просмотр комментариев под постом и добавления комментария 
 class PostCommentListAPIView(ListCreateAPIView):
       serializer_class = CommentSerializer
       permission_classes = [IsAuthenticatedOrReadOnly]
@@ -42,8 +46,8 @@ class PostCommentListAPIView(ListCreateAPIView):
         post_id = self.kwargs['id']
         post = Post.objects.get(id=post_id)
         serializer.save(author=self.request.user, post=post)
-        
-#просмотр детального комментария для редактирования и удаления комментария
+
+#просмотр детального комментария для редактирования и удаления комментария для автора комментария
 class CommentDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentDetailSerializer

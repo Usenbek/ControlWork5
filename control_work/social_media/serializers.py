@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Post, Comment
+from .models import Post, Comment
 
 
 class PostListSerializer(serializers.ModelSerializer):
